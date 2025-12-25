@@ -56,8 +56,8 @@ function updateCharacterCount(inputId, counterId, maxLength) {
     const counter = $(`#${counterId}`);
 
     input.on('input', () => {
-        const length = input.val().length;
-        counter.text(`${length}/${maxLength}`);
+        const length = 1000-input.val().length;
+        counter.text(`残 ${length}`);
 
         if (length > maxLength) {
             counter.addClass('error');
@@ -406,13 +406,13 @@ function login(email, password) {
 }
 
 // 新規登録処理
-function register(email, password) {
-    if (!validateAuthInput(email, password, true)) return;
+function register(email, password,name) {
+    if (!validateAuthInput(email, password, name,true)) return;
 
     const button = $('#registerButton');
     button.prop('disabled', true);
 
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    firebase.auth().createUserWithEmailAndPassword(email, password,name)
     .then(() => {
         showMessage('アカウントを作成しました');
         clearAuthForm();
@@ -440,6 +440,7 @@ function logout() {
 function clearAuthForm() {
     $('#loginEmail').val('');
     $('#loginPassword').val('');
+    $('#displayName').val('');
 }
 
 // UI更新
@@ -448,11 +449,11 @@ function updateUI(user) {
     if (user) {
         $('.logged-in').show();
         $('.logged-out').hide();
-        $('#userEmail').text(user.email);
+        $('#userdisplayName').text(user.name);
     } else {
         $('.logged-in').hide();
         $('.logged-out').show();
-        $('#userEmail').text('');
+        $('#userdisplayName').text('');
     }
 }
 
@@ -535,6 +536,12 @@ window.addEventListener('unload', () => {
                        class="form-control" placeholder="6文字以上">
                 <small class="help-text">※新規登録時は6文字以上</small>
             </div>
+           <div class="form-group">
+                <label for="displayName">ニックネーム</label>
+                <input type="name" id="displayName"
+                       class="form-control" 
+                       placeholder="30文字以内">
+            </div>
             <div class="button-group">
                 <button id="loginButton" class="btn-primary">ログイン</button>
                 <button id="registerButton" class="btn-secondary">新規登録</button>
@@ -553,7 +560,7 @@ window.addEventListener('unload', () => {
                 <label for="contentInput">投稿内容</label>
                 <textarea id="contentInput" class="form-control"
                           placeholder="投稿内容を入力してください"></textarea>
-                <small class="character-count" id="contentCount">0/1000</small>
+                <small class="character-count" id="contentCount">1000</small>
             </div>
             <div class="button-group">
                 <button id="postButton" class="btn-primary">投稿する</button>
@@ -588,7 +595,7 @@ window.addEventListener('unload', () => {
             <div class="modal-body">
                 <div class="form-group">
                     <textarea id="editContent" class="form-control"></textarea>
-                    <small class="character-count" id="editContentCount">0/1000</small>
+                    <small class="character-count" id="editContentCount">1000</small>
                 </div>
             </div>
             <div class="modal-footer">
