@@ -144,6 +144,23 @@ function escapeHtml(str) {
 
 // タイムスタンプのフォーマット
 function formatTimestamp(timestamp) {
+    const now = Date.now();
+    const diffSec = Math.floor((now - timestamp) / 1000);
+
+    // 60秒未満
+    if (diffSec < 60) {
+        return `${diffSec}秒前`;
+    }
+    // 1時間未満
+    if (diffSec < 3600) {
+        return `${Math.floor(diffSec / 60)}分前`;
+    }
+    // 1日未満
+    if (diffSec < 86400) {
+        return `${Math.floor(diffSec / 3600)}時間前`;
+    }
+
+    // 1日以上は日付表示
     const date = new Date(timestamp);
     return date.toLocaleString('ja-JP', {
         year: 'numeric',
@@ -153,6 +170,7 @@ function formatTimestamp(timestamp) {
         minute: '2-digit'
     });
 }
+
 
 // 投稿の編集権限チェック
 function canEditPost(post) {
