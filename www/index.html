@@ -536,12 +536,7 @@ window.addEventListener('unload', () => {
                        class="form-control" placeholder="6文字以上">
                 <small class="help-text">※新規登録時は6文字以上</small>
             </div>
-           <div class="form-group">
-                <label for="displayName">ニックネーム</label>
-                <input type="name" id="displayName"
-                       class="form-control" 
-                       placeholder="30文字以内">
-            </div>
+           
             <div class="button-group">
                 <button id="loginButton" class="btn-primary">ログイン</button>
                 <button id="registerButton" class="btn-secondary">新規登録</button>
@@ -553,6 +548,35 @@ window.addEventListener('unload', () => {
             <span>ログイン中：<span id="userEmail"></span></span>
             <button id="logoutButton" class="btn-secondary">ログアウト</button>
         </div>
+
+        <!-- 背景色変更 -->
+            <p>背景色</p>
+            <select onchange="changeColor(this.value)">
+                <option value="white">白</option>
+                <option value="black">黒</option>
+                <option value="pink">ピンク</option>
+                <option value="lightblue">水色</option>
+                <option value="lightgreen">黄緑</option>
+            </select>
+
+            <script>
+                function changeColor(color) {
+                    if (color === "") {
+                        return;
+                    }
+                    document.body.style.backgroundColor = color;
+                    localStorage.setItem("bgColor", color);
+                }
+
+                window.onload = function () {
+                    var savedColor = localStorage.getItem("bgColor");
+                    if (savedColor !== null) {
+                        document.body.style.backgroundColor = savedColor;
+                        document.querySelector("select").value = savedColor;
+                    }
+                };
+            </script>
+
 
         <!-- 投稿フォーム（ログイン時表示） -->
         <div class="post-form logged-in">
